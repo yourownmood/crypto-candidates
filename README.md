@@ -6,7 +6,7 @@ A node script to filter cryptocurrencies with potential.
 
 * Run `npm install`
 * Rename `portfolio.sample.json` as `portfolio.json`.
-* Include the currencies which are currently in your portfolio in `portfolio.json`.
+* Include the currencies and amount which are currently in your portfolio in `portfolio.json`.
 * Setup your filters in the `Filter parameters:` section of `index.js`
 
 ## How to run:

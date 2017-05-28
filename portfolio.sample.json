@@ -1,6 +1,18 @@
 [
-  "Bitcoin",
-  "Ethereum",
-  "Ripple",
-  "NEM"
+  {
+    "name": "Bitcoin",
+    "amount": 0.1
+  },
+  {
+    "name": "Ethereum",
+    "amount": 0.2
+  },
+  {
+    "name": "Ripple",
+    "amount": 0.3
+  },
+  {
+    "name": "NEM",
+    "amount": 0.4
+  }
 ]
