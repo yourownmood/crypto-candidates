@@ -1,0 +1,17 @@
+{
+  "name": "crypto-candidates",
+  "version": "1.0.0",
+  "description": "A node script to filter cryptocurrencies with potential.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Steven Bax (yourownmood)",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "lodash": "^4.17.4",
+    "omit-deep": "^0.3.0",
+    "request": "^2.81.0"
+  }
+}
