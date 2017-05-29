@@ -4,6 +4,7 @@
   "description": "A node script to filter cryptocurrencies with potential.",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Steven Bax (yourownmood)",
