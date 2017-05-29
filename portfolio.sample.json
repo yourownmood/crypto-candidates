@@ -1,7 +1,7 @@
 [
   {
     "name": "Bitcoin",
-    "amount": 0.1
+    "amount": 2.1123
   },
   {
     "name": "Ethereum",
@@ -9,7 +9,7 @@
   },
   {
     "name": "Ripple",
-    "amount": 0.3
+    "amount": 3.999
   },
   {
     "name": "NEM",

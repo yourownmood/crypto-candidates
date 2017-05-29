@@ -14,7 +14,6 @@ const maxPrice = 0.01
 const minDailyVolume = 100000
 const minMarketCap = 10000000
 const minPercentChange7d = -100
-const currencyException = 'Bitcoin'
 
 // Check currency to exclude
 
@@ -37,20 +36,30 @@ function filterCandidates(candidates) {
   candidates = JSON.parse(candidates);
   candidates = omitDeep(candidates, ['id', 'price_' + excludedCurrency, '24h_volume_' + excludedCurrency, 'market_cap_' + excludedCurrency, 'last_updated', 'available_supply'])
 
+  for(let key in portfolio) {
+    checkAndAdd(portfolio[key].name, portfolio[key].amount, candidates)
+  }
+
   let myCandidates = _.filter(candidates, function(r) {
     return (r['price_eur'] < maxPrice &&
            r['24h_volume_eur'] > minDailyVolume &&
            r['market_cap_eur'] > minMarketCap &&
-           r['percent_change_7d'] > minPercentChange7d) || r['name'] === currencyException
+           r['percent_change_7d'] > minPercentChange7d) || r['amount']
   });
 
-  let canidatePortfolio = _.merge(myCandidates, portfolio);
+  return printCandidates(myCandidates)
+}
 
-  return printCandidates(canidatePortfolio)
+function checkAndAdd(name, amount, candidates) {
+  var id = candidates.length + 1;
+  var found = candidates.some(function (el) {
+    if(el.name === name) {
+      el.amount = amount
+    }
+  })
 }
 
 function printCandidates(candidates) {
-
   console.log(chalk.bold.white('\n---------------------------------------------'))
   console.log(chalk.bold.white('Candidates:'))
   console.log(chalk.bold.white('---------------------------------------------'))
@@ -60,7 +69,6 @@ function printCandidates(candidates) {
   console.log(chalk.bold.white('\n---------------------------------------------'))
   console.log(chalk.bold.white('Filtered candidates: '), chalk.bold.yellow(candidates.length))
   console.log(chalk.bold.white('---------------------------------------------'))
-
   console.log(chalk.grey('percent change 24h'))
   console.log(chalk.grey('---------------------------------------------'))
 
@@ -70,7 +78,7 @@ function printCandidates(candidates) {
         chalk.bold(candidates[key].name),
         chalk.grey(' -'),
         candidates[key].percent_change_24h > 0 ? chalk.green(candidates[key].percent_change_24h) : chalk.red.bold(candidates[key].percent_change_24h),
-        chalk.grey('(owned, ' + candidates[key].amount + ')')
+        chalk.grey('(' + candidates[key].amount +')')
       )
     } else {
       console.log(
@@ -80,6 +88,5 @@ function printCandidates(candidates) {
       )
     }
   }
-
   console.log('\n')
 }
