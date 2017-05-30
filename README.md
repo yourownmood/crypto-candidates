@@ -14,3 +14,9 @@ A node script to filter cryptocurrencies with potential.
 ## How to run:
 
 Run `$ yarn start` in your terminal.
+
+## Todo
+
+* Sort result by price (or other parameter).
+* Save previous result and show trend since last check.
+* Move the filter parameters to its own file.
