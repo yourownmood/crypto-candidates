@@ -19,5 +19,6 @@ Run `$ yarn start` in your terminal.
 ## Todo
 
 * ~~Move the filter parameters to its own file.~~
-* Sort result by price (or other parameter).
+* Include buy price in portfolio (EUR, USD, BTC) and do a conversion to the current situation.
 * Save previous result and show trend since last check.
+* Sort result by price (or other parameter).
