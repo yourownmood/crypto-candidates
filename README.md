@@ -9,7 +9,7 @@ A node script to filter cryptocurrencies with potential.
 * Install dependencies: `$ yarn install` in this project folder.
 * Copy portfolio file: `$ cp settings/portfolio.sample.json settings/portfolio.json`.
 * Copy parameters file: `$ cp settings/parameters.sample.js settings/parameters.js`.
-* Include the currencies and amount which are currently in your portfolio in `settings/portfolio.json`.
+* Include the currencies, amount and cost (in BTC) which are currently in your portfolio in `settings/portfolio.json`.
 * Setup your filter parameters in `settings/parameters.js`.
 
 ## How to run:
