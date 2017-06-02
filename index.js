@@ -5,15 +5,15 @@ const chalk = require('chalk')
 const omitDeep = require('omit-deep')
 const request = require('request')
 const consoleTable = require('console.table')
-const portfolio = require('./portfolio')
+const portfolio = require('./settings/portfolio')
+const filterParameters = require('./settings/parameters')
 
-// Filter parameters
-
-const currency = 'EUR' // EUR or USD
-const maxPrice = 0.015
-const minDailyVolume = 100000
-const minMarketCap = 10000000
-const minPercentChange7d = -100
+const parameters = filterParameters.parameters;
+const currency = parameters.currency;
+const maxPrice = parameters.maxPrice;
+const minDailyVolume = parameters.minDailyVolume;
+const minMarketCap = parameters.minMarketCap;
+const minPercentChange7d = parameters.minPercentChange7d;
 
 let excludedCurrency
 let currencySymbol
