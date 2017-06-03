@@ -2,10 +2,12 @@
 
 const _ = require('lodash')
 const chalk = require('chalk')
+const jsonfile = require('jsonfile')
 const omitDeep = require('omit-deep')
 const request = require('request')
-const portfolio = require('./settings/portfolio')
+
 const filterParameters = require('./settings/parameters')
+const portfolio = require('./settings/portfolio')
 
 const parameters = filterParameters.parameters
 const currency = parameters.currency
@@ -239,4 +241,18 @@ function printCandidates (candidates) {
   )
 
   console.log('\r')
+
+  savingHistory(candidates)
+}
+
+function savingHistory (data) {
+  const file = 'history.json'
+
+  jsonfile.writeFile(file, data, {spaces: 2}, function (err) {
+    if (err) {
+      console.error(err)
+    } else {
+      console.error('History saved')
+    }
+  })
 }
