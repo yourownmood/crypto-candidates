@@ -226,14 +226,15 @@ function printCandidates (candidates) {
       totalValueBTC > totalCostBTC
       ? chalk.green(parseFloat(totalPercentageChange).toFixed(2) + '%')
       : chalk.red(totalPercentageChange + '%'),
-      chalk.white(' Cost:', totalCostBTC),
-      chalk.white('Value:', totalValueBTC)
+      chalk.white('| BTC:', parseFloat(totalValueBTC - totalCostBTC).toFixed(3), '|'),
+      chalk.white('Money:', currencies.currencySymbol + parseFloat(totalValueMoney).toFixed(2))
     )
   )
 
   console.log(
     chalk.bgBlack(
-      chalk.white('Money:', currencies.currencySymbol + parseFloat(totalValueMoney).toFixed(2))
+      chalk.grey('Cost:', totalCostBTC),
+      chalk.grey('Value:', totalValueBTC)
     )
   )
 
