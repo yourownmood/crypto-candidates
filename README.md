@@ -2,6 +2,8 @@
 
 A node script to filter cryptocurrencies with potential, combine it with own portfolio currencies, show trends and show changes since last run.
 
+<img src='/docs/crypto-candidates-example.png?raw=true' width='425' alt='Crypto Candidates example' />
+
 ## First setup:
 
 * Install [NodeJS LTS version](https://nodejs.org/en/)
