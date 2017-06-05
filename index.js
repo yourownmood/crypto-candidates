@@ -242,11 +242,11 @@ function printCandidates (candidates) {
     ? chalk.green(parseFloat(totalPercentageChange).toFixed(2) + '%')
     : chalk.red(totalPercentageChange + '%'),
     history !== undefined
-    ? chalk.grey(parseFloat(historyTotalPercentageChange).toFixed(2) + '%')
+    ? chalk.grey(parseFloat((totalPercentageChange - historyTotalPercentageChange)).toFixed(2) + '%')
     : '',
     '| BTC:', parseFloat(totalValueBTC - totalCostBTC).toFixed(3),
     history !== undefined
-    ? chalk.grey(parseFloat(historyTotalValueBTC - historyTotalCostBTC).toFixed(3))
+    ? chalk.grey(parseFloat(((totalValueBTC - totalCostBTC) - (historyTotalValueBTC - historyTotalCostBTC))).toFixed(3))
     : '',
     '|', currencies.currencySymbol + parseFloat(totalValueMoney).toFixed(2)
   )

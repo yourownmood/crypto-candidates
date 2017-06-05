@@ -23,7 +23,7 @@ Run `$ yarn start` in your terminal.
 * ~~Move the filter parameters to its own file.~~
 * ~~Include buy price in portfolio (EUR, USD, BTC) and do a conversion to the current situation.~~
 * ~~Save total previous result and show total trend since last check.~~
-* Show difference in total history comparison instead of total amounts.
+* ~~Show difference in total history comparison instead of total amounts.~~
 * Show gain or loss per currency based on history search.
 * Only compare/save history if history is different then current state.
 * Sort result by price (or other parameter).
