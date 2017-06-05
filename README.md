@@ -27,3 +27,7 @@ Run `$ yarn start` in your terminal.
 * Show gain or loss per currency based on history search.
 * Only compare/save history if history is different then current state.
 * Sort result by price (or other parameter).
+
+---
+
+Donations are welcome at: 1AsfquPtC9RFvUuEKhbtzJcJW81pVLpVCn (bitcoin address) :)
