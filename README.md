@@ -1,4 +1,4 @@
-# Crypto Candidates
+# Crypto Currency Candidates
 
 A node script to filter cryptocurrencies with potential, combine it with own portfolio currencies, show trends and show changes since last run.
 

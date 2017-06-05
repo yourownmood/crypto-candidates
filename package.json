@@ -1,5 +1,5 @@
 {
-  "name": "crypto-candidates",
+  "name": "crypto-currency-candidates",
   "version": "1.0.0",
   "description": "A node script to filter cryptocurrencies with potential.",
   "main": "index.js",
