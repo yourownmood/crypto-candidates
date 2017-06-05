@@ -168,13 +168,9 @@ function filterCandidates (candidates, callback) {
 
 function printCandidates (candidates) {
   console.log(
-    chalk.bgBlack(
-      chalk.bold.white('\nFiltered candidates: '), chalk.bold.yellow(candidates.length)
-    )
-  )
-  console.log(
-    chalk.bgBlack(
-      chalk.bold.white('------------------------------------------------------------')
+    chalk.bold(
+      '\nFiltered candidates: ', chalk.yellow(candidates.length),
+      '\n------------------------------------------------------------'
     )
   )
 
@@ -183,59 +179,49 @@ function printCandidates (candidates) {
       if (candidates[key].amount) {
         if (candidates[key]['price_' + currencies.lowerCase] < maxPrice && candidates[key]['24h_volume_' + currencies.lowerCase] > minDailyVolume && candidates[key]['market_cap_' + currencies.lowerCase] > minMarketCap && candidates[key].percent_change_7d > minPercentChange7d) {
           console.log(
-            chalk.bgBlack(
-              chalk.white.bold(candidates[key].name),
-              chalk.grey(' -'),
-              chalk.grey('(' + candidates[key].amount + ' | ' + currencies.currencySymbol + parseFloat(candidates[key].amount * candidates[key]['price_' + currencies.lowerCase]).toFixed(2) + ')')
-            )
+            chalk.bold(candidates[key].name),
+            chalk.grey('- (' + candidates[key].amount + ' | ' + currencies.currencySymbol + parseFloat(candidates[key].amount * candidates[key]['price_' + currencies.lowerCase]).toFixed(2) + ')')
           )
         } else {
           console.log(
-            chalk.bgBlack(
-              chalk.grey.bold(candidates[key].name),
-              chalk.grey(' -'),
-              chalk.grey('(' + candidates[key].amount + ' | ' + currencies.currencySymbol + parseFloat(candidates[key].amount * candidates[key]['price_' + currencies.lowerCase]).toFixed(2) + ')')
-            )
+            chalk.grey.bold(candidates[key].name),
+            chalk.grey('- (' + candidates[key].amount + ' | ' + currencies.currencySymbol + parseFloat(candidates[key].amount * candidates[key]['price_' + currencies.lowerCase]).toFixed(2) + ')')
           )
         }
       } else {
-        console.log(chalk.bgBlack.bold.white(candidates[key].name))
+        console.log(chalk.bold(candidates[key].name))
       }
 
       console.log(
-        chalk.bgBlack(
-          chalk.grey('['),
-          candidates[key].percent_change_1h > 0
-          ? chalk.green(candidates[key].percent_change_1h)
-          : chalk.red.bold(candidates[key].percent_change_1h),
-          chalk.grey(' 1h ]'),
-          chalk.grey('['),
-          candidates[key].percent_change_24h > 0
-          ? chalk.green(candidates[key].percent_change_24h)
-          : chalk.red.bold(candidates[key].percent_change_24h),
-          chalk.grey(' 24h ]'),
-          chalk.grey('['),
-          candidates[key].percent_change_7d > 0
-          ? chalk.green(candidates[key].percent_change_7d)
-          : chalk.red.bold(candidates[key].percent_change_7d),
-          chalk.grey(' 7d ]'),
-          chalk.grey('[ '),
-          candidates[key]['price_' + currencies.lowerCase] < maxPrice
-          ? chalk.white(currencies.currencySymbol + parseFloat(candidates[key]['price_' + currencies.lowerCase]).toFixed(decimals.decimalPositionPlus))
-          : chalk.grey(currencies.currencySymbol + parseFloat(candidates[key]['price_' + currencies.lowerCase]).toFixed(decimals.decimalPosition)),
-          chalk.grey(' ]')
-        )
+        chalk.grey('['),
+        candidates[key].percent_change_1h > 0
+        ? chalk.green(candidates[key].percent_change_1h)
+        : chalk.red.bold(candidates[key].percent_change_1h),
+        chalk.grey(' 1h ]'),
+        chalk.grey('['),
+        candidates[key].percent_change_24h > 0
+        ? chalk.green(candidates[key].percent_change_24h)
+        : chalk.red.bold(candidates[key].percent_change_24h),
+        chalk.grey(' 24h ]'),
+        chalk.grey('['),
+        candidates[key].percent_change_7d > 0
+        ? chalk.green(candidates[key].percent_change_7d)
+        : chalk.red.bold(candidates[key].percent_change_7d),
+        chalk.grey(' 7d ]'),
+        chalk.grey('[ '),
+        candidates[key]['price_' + currencies.lowerCase] < maxPrice
+        ? currencies.currencySymbol + parseFloat(candidates[key]['price_' + currencies.lowerCase]).toFixed(decimals.decimalPositionPlus)
+        : chalk.grey(currencies.currencySymbol + parseFloat(candidates[key]['price_' + currencies.lowerCase]).toFixed(decimals.decimalPosition)),
+        chalk.grey(' ]')
       )
 
       if (candidates[key].cost > 0) {
         console.log(
-          chalk.bgBlack(
-            candidates[key].percentageChange > 0
-            ? chalk.green(parseFloat(candidates[key].percentageChange).toFixed(1) + '%')
-            : chalk.red(parseFloat(candidates[key].percentageChange).toFixed(1) + '%'),
-            '| Cost:', parseFloat(candidates[key].cost).toFixed(decimals.decimalPositionPlus),
-            '| Value:', parseFloat(candidates[key].valueInBTC).toFixed(decimals.decimalPositionPlus)
-          )
+          candidates[key].percentageChange > 0
+          ? chalk.green(parseFloat(candidates[key].percentageChange).toFixed(1) + '%')
+          : chalk.red(parseFloat(candidates[key].percentageChange).toFixed(1) + '%'),
+          '| Cost:', parseFloat(candidates[key].cost).toFixed(decimals.decimalPositionPlus),
+          '| Value:', parseFloat(candidates[key].valueInBTC).toFixed(decimals.decimalPositionPlus)
         )
       }
 
@@ -244,38 +230,31 @@ function printCandidates (candidates) {
   }
 
   console.log(
-    chalk.bgBlack(
-      chalk.bold.white('------------------------------------------------------------')
-    )
+    chalk.bold('------------------------------------------------------------\n'),
+    history === undefined
+    ? ''
+    : historyTotalPercentageChange === totalPercentageChange
+    ? chalk.bold.grey('--')
+    : historyTotalPercentageChange < totalPercentageChange
+    ? chalk.bold.green('_/')
+    : chalk.bold.red('‾\\'),
+    totalValueBTC > totalCostBTC
+    ? chalk.green(parseFloat(totalPercentageChange).toFixed(2) + '%')
+    : chalk.red(totalPercentageChange + '%'),
+    history !== undefined
+    ? chalk.grey(parseFloat(historyTotalPercentageChange).toFixed(2) + '%')
+    : '',
+    '| BTC:', parseFloat(totalValueBTC - totalCostBTC).toFixed(3),
+    history !== undefined
+    ? chalk.grey(parseFloat(historyTotalValueBTC - historyTotalCostBTC).toFixed(3))
+    : '',
+    '|', currencies.currencySymbol + parseFloat(totalValueMoney).toFixed(2)
   )
 
   console.log(
-    chalk.bgBlack(
-      history === undefined
-      ? ''
-      : historyTotalPercentageChange === totalPercentageChange
-      ? chalk.bold.grey('--')
-      : historyTotalPercentageChange < totalPercentageChange
-      ? chalk.bold.green('_/')
-      : chalk.bold.red('‾\\'),
-      totalValueBTC > totalCostBTC
-      ? chalk.green(parseFloat(totalPercentageChange).toFixed(2) + '%')
-      : chalk.red(totalPercentageChange + '%'),
-      history !== undefined
-      ? chalk.grey(parseFloat(historyTotalPercentageChange).toFixed(2) + '%')
-      : '',
-      chalk.white('| BTC:', parseFloat(totalValueBTC - totalCostBTC).toFixed(3)),
-      history !== undefined
-      ? chalk.grey(parseFloat(historyTotalValueBTC - historyTotalCostBTC).toFixed(3))
-      : '',
-      chalk.white('|', currencies.currencySymbol + parseFloat(totalValueMoney).toFixed(2))
-    )
-  )
-
-  console.log(
-    chalk.bgBlack(
-      chalk.grey('Cost:', totalCostBTC),
-      chalk.grey('Value:', totalValueBTC)
+    chalk.grey(
+      'Cost:', totalCostBTC,
+      'Value:', totalValueBTC
     )
   )
 
