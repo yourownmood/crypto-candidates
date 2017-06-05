@@ -31,6 +31,8 @@ let totalCostBTC = 0
 let totalValueBTC = 0
 let totalPercentageChange = 0
 let totalValueMoney = 0
+let historyValueInBTC = 0
+let historyPercentageChange = 0
 let historyTotalCostBTC = 0
 let historyTotalValueBTC = 0
 let historyTotalPercentageChange = 0
@@ -156,6 +158,16 @@ function filterCandidates (candidates, callback) {
   if (history) {
     for (let key in history) {
       if (history[key].cost > 0 && history[key].name !== 'Bitcoin') {
+        // History conversion to BTC/MONEY
+        historyValueInBTC = history[key].amount * history[key].price_btc
+        historyPercentageChange = ((historyValueInBTC - history[key].cost) / history[key].cost) * 100
+
+        // Push history conversions in myCandidates
+        // TODO: match myCandidates with History 'checkAndAdd'
+        myCandidates[key].historyValueInBTC = historyValueInBTC
+        myCandidates[key].historyPercentageChange = historyPercentageChange
+
+        // Calculate combined history value and history cost
         historyTotalCostBTC = historyTotalCostBTC + history[key].cost
         historyTotalValueBTC = historyTotalValueBTC + history[key].valueInBTC
         historyTotalPercentageChange = ((historyTotalValueBTC - historyTotalCostBTC) / historyTotalValueBTC) * 100
@@ -217,9 +229,19 @@ function printCandidates (candidates) {
 
       if (candidates[key].cost > 0) {
         console.log(
+          history === undefined
+          ? ''
+          : candidates[key].historyPercentageChange === candidates[key].percentageChange
+          ? chalk.bold.grey('--')
+          : candidates[key].historyPercentageChange < candidates[key].percentageChange
+          ? chalk.bold.green('_/')
+          : chalk.bold.red('‾\\'),
           candidates[key].percentageChange > 0
           ? chalk.green(parseFloat(candidates[key].percentageChange).toFixed(1) + '%')
           : chalk.red(parseFloat(candidates[key].percentageChange).toFixed(1) + '%'),
+          history !== undefined
+          ? chalk.grey(parseFloat((candidates[key].percentageChange - candidates[key].historyPercentageChange)).toFixed(1) + '%')
+          : '',
           '| Cost:', parseFloat(candidates[key].cost).toFixed(decimals.decimalPositionPlus),
           '| Value:', parseFloat(candidates[key].valueInBTC).toFixed(decimals.decimalPositionPlus)
         )
@@ -260,6 +282,7 @@ function printCandidates (candidates) {
 
   console.log('\r')
 
+  // TODO: if candidates[key].history ===  candidates[key].current
   if ((historyTotalValueBTC !== totalValueBTC) || (historyTotalPercentageChange !== totalPercentageChange)) {
     savingHistory(candidates)
   } else {
