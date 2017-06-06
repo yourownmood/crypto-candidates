@@ -242,8 +242,11 @@ function printCandidates (candidates) {
           history !== undefined
           ? chalk.grey(parseFloat((candidates[key].percentageChange - candidates[key].historyPercentageChange)).toFixed(1) + '%')
           : '',
-          '| Cost:', parseFloat(candidates[key].cost).toFixed(decimals.decimalPositionPlus),
-          '| Value:', parseFloat(candidates[key].valueInBTC).toFixed(decimals.decimalPositionPlus)
+          '| BTC:', parseFloat(candidates[key].valueInBTC).toFixed(decimals.decimalPositionPlus),
+          history === undefined
+          ? ''
+          : chalk.bold.grey(parseFloat(((candidates[key].valueInBTC) - (candidates[key].historyValueInBTC))).toFixed(decimals.decimalPositionPlus)),
+          '| Cost:', parseFloat(candidates[key].cost).toFixed(decimals.decimalPositionPlus)
         )
       }
 
