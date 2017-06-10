@@ -25,6 +25,7 @@ Run `$ yarn start` in your terminal.
 * ~~Save total previous result and show total trend since last check.~~
 * ~~Show difference in total history comparison instead of total amounts.~~
 * ~~Show gain or loss per currency based on history search.~~
+* Include USD/EUR as cost currency.
 * Only compare/save history if history is different then current state.
 * Sort result by price (or other parameter).
 
