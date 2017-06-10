@@ -126,17 +126,16 @@ function filterCandidates (candidates, callback) {
     return (r['price_' + currencies.lowerCase] < maxPrice &&
            r['24h_volume_' + currencies.lowerCase] > minDailyVolume &&
            r['market_cap_' + currencies.lowerCase] > minMarketCap &&
-           r['percent_change_7d'] > minPercentChange7d &&
-           r['name'] !== 'Bitcoin') || r['amount']
+           r['percent_change_7d'] > minPercentChange7d) || r['amount']
   })
 
   // Enrich myCandidates list with cost and profit
   for (let key in myCandidates) {
-    if (myCandidates[key].cost > 0 && myCandidates[key].name !== 'Bitcoin') {
+    if (myCandidates[key].cost && myCandidates[key].cost.amount > 0 && myCandidates[key].cost.currency === 'BTC' && myCandidates[key].name !== 'Bitcoin') {
       // Conversion to BTC/MONEY
       valueInBTC = myCandidates[key].amount * myCandidates[key].price_btc
       valueInMoney = myCandidates[key].amount * myCandidates[key]['price_' + currencies.lowerCase]
-      percentageChange = ((valueInBTC - myCandidates[key].cost) / myCandidates[key].cost) * 100
+      percentageChange = ((valueInBTC - myCandidates[key].cost.amount) / myCandidates[key].cost.amount) * 100
 
       // Push conversions in myCandidates
       myCandidates[key].valueInBTC = valueInBTC
@@ -144,7 +143,7 @@ function filterCandidates (candidates, callback) {
       myCandidates[key].percentageChange = percentageChange
 
       // Calculate combined value and cost
-      totalCostBTC = totalCostBTC + myCandidates[key].cost
+      totalCostBTC = totalCostBTC + myCandidates[key].cost.amount
       totalValueBTC = totalValueBTC + valueInBTC
       totalPercentageChange = ((totalValueBTC - totalCostBTC) / totalValueBTC) * 100
       totalValueMoney = totalValueMoney + valueInMoney
@@ -155,10 +154,10 @@ function filterCandidates (candidates, callback) {
 
   if (history) {
     for (let key in history) {
-      if (history[key].cost > 0 && history[key].name !== 'Bitcoin') {
+      if (history[key].cost && history[key].cost.amount > 0 && history[key].cost.currency === 'BTC' && history[key].name !== 'Bitcoin') {
         // History conversion to BTC/MONEY
         historyValueInBTC = history[key].amount * history[key].price_btc
-        historyPercentageChange = ((historyValueInBTC - history[key].cost) / history[key].cost) * 100
+        historyPercentageChange = ((historyValueInBTC - history[key].cost.amount) / history[key].cost.amount) * 100
 
         // Push history conversions in myCandidates
         // TODO: match myCandidates with History 'checkAndAdd'
@@ -166,7 +165,7 @@ function filterCandidates (candidates, callback) {
         myCandidates[key].historyPercentageChange = historyPercentageChange
 
         // Calculate combined history value and history cost
-        historyTotalCostBTC = historyTotalCostBTC + history[key].cost
+        historyTotalCostBTC = historyTotalCostBTC + history[key].cost.amount
         historyTotalValueBTC = historyTotalValueBTC + history[key].valueInBTC
         historyTotalPercentageChange = ((historyTotalValueBTC - historyTotalCostBTC) / historyTotalValueBTC) * 100
       }
@@ -185,71 +184,69 @@ function printCandidates (candidates) {
   )
 
   for (let key in candidates) {
-    if (candidates[key].name !== 'Bitcoin') {
-      if (candidates[key].amount) {
-        if (candidates[key]['price_' + currencies.lowerCase] < maxPrice && candidates[key]['24h_volume_' + currencies.lowerCase] > minDailyVolume && candidates[key]['market_cap_' + currencies.lowerCase] > minMarketCap && candidates[key].percent_change_7d > minPercentChange7d) {
-          console.log(
-            chalk.bold(candidates[key].name),
-            chalk.grey('- (' + candidates[key].amount + ' | ' + currencies.currencySymbol + parseFloat(candidates[key].amount * candidates[key]['price_' + currencies.lowerCase]).toFixed(2) + ')')
-          )
-        } else {
-          console.log(
-            chalk.grey.bold(candidates[key].name),
-            chalk.grey('- (' + candidates[key].amount + ' | ' + currencies.currencySymbol + parseFloat(candidates[key].amount * candidates[key]['price_' + currencies.lowerCase]).toFixed(2) + ')')
-          )
-        }
-      } else {
-        console.log(chalk.bold(candidates[key].name))
-      }
-
-      console.log(
-        chalk.grey('['),
-        candidates[key].percent_change_1h > 0
-        ? chalk.green(candidates[key].percent_change_1h)
-        : chalk.red.bold(candidates[key].percent_change_1h),
-        chalk.grey(' 1h ]'),
-        chalk.grey('['),
-        candidates[key].percent_change_24h > 0
-        ? chalk.green(candidates[key].percent_change_24h)
-        : chalk.red.bold(candidates[key].percent_change_24h),
-        chalk.grey(' 24h ]'),
-        chalk.grey('['),
-        candidates[key].percent_change_7d > 0
-        ? chalk.green(candidates[key].percent_change_7d)
-        : chalk.red.bold(candidates[key].percent_change_7d),
-        chalk.grey(' 7d ]'),
-        chalk.grey('[ '),
-        candidates[key]['price_' + currencies.lowerCase] < maxPrice
-        ? currencies.currencySymbol + parseFloat(candidates[key]['price_' + currencies.lowerCase]).toFixed(decimals.decimalPositionPlus)
-        : chalk.grey(currencies.currencySymbol + parseFloat(candidates[key]['price_' + currencies.lowerCase]).toFixed(decimals.decimalPosition)),
-        chalk.grey(' ]')
-      )
-
-      if (candidates[key].cost > 0) {
+    if (candidates[key].amount) {
+      if (candidates[key]['price_' + currencies.lowerCase] < maxPrice && candidates[key]['24h_volume_' + currencies.lowerCase] > minDailyVolume && candidates[key]['market_cap_' + currencies.lowerCase] > minMarketCap && candidates[key].percent_change_7d > minPercentChange7d) {
         console.log(
-          history === undefined
-          ? ''
-          : candidates[key].historyPercentageChange === candidates[key].percentageChange
-          ? chalk.bold.grey('--')
-          : candidates[key].historyPercentageChange < candidates[key].percentageChange
-          ? chalk.bold.green('_/')
-          : chalk.bold.red('‾\\'),
-          candidates[key].percentageChange > 0
-          ? chalk.green(parseFloat(candidates[key].percentageChange).toFixed(1) + '%')
-          : chalk.red(parseFloat(candidates[key].percentageChange).toFixed(1) + '%'),
-          history !== undefined
-          ? chalk.grey(parseFloat((candidates[key].percentageChange - candidates[key].historyPercentageChange)).toFixed(1) + '%')
-          : '',
-          '| BTC:', parseFloat(candidates[key].valueInBTC).toFixed(decimals.decimalPositionPlus),
-          history === undefined
-          ? ''
-          : chalk.bold.grey(parseFloat(((candidates[key].valueInBTC) - (candidates[key].historyValueInBTC))).toFixed(decimals.decimalPositionPlus)),
-          '| Cost:', parseFloat(candidates[key].cost).toFixed(decimals.decimalPositionPlus)
+          chalk.bold(candidates[key].name),
+          chalk.grey('- (' + candidates[key].amount + ' | ' + currencies.currencySymbol + parseFloat(candidates[key].amount * candidates[key]['price_' + currencies.lowerCase]).toFixed(2) + ')')
+        )
+      } else {
+        console.log(
+          chalk.grey.bold(candidates[key].name),
+          chalk.grey('- (' + candidates[key].amount + ' | ' + currencies.currencySymbol + parseFloat(candidates[key].amount * candidates[key]['price_' + currencies.lowerCase]).toFixed(2) + ')')
         )
       }
-
-      console.log('\r')
+    } else {
+      console.log(chalk.bold(candidates[key].name))
     }
+
+    console.log(
+      chalk.grey('['),
+      candidates[key].percent_change_1h > 0
+      ? chalk.green(candidates[key].percent_change_1h)
+      : chalk.red.bold(candidates[key].percent_change_1h),
+      chalk.grey(' 1h ]'),
+      chalk.grey('['),
+      candidates[key].percent_change_24h > 0
+      ? chalk.green(candidates[key].percent_change_24h)
+      : chalk.red.bold(candidates[key].percent_change_24h),
+      chalk.grey(' 24h ]'),
+      chalk.grey('['),
+      candidates[key].percent_change_7d > 0
+      ? chalk.green(candidates[key].percent_change_7d)
+      : chalk.red.bold(candidates[key].percent_change_7d),
+      chalk.grey(' 7d ]'),
+      chalk.grey('[ '),
+      candidates[key]['price_' + currencies.lowerCase] < maxPrice
+      ? currencies.currencySymbol + parseFloat(candidates[key]['price_' + currencies.lowerCase]).toFixed(decimals.decimalPositionPlus)
+      : chalk.grey(currencies.currencySymbol + parseFloat(candidates[key]['price_' + currencies.lowerCase]).toFixed(decimals.decimalPosition)),
+      chalk.grey(' ]')
+    )
+
+    if (candidates[key].cost && candidates[key].cost.amount > 0 && candidates[key].cost.currency === 'BTC') {
+      console.log(
+        history === undefined
+        ? ''
+        : candidates[key].historyPercentageChange === candidates[key].percentageChange
+        ? chalk.bold.grey('--')
+        : candidates[key].historyPercentageChange < candidates[key].percentageChange
+        ? chalk.bold.green('_/')
+        : chalk.bold.red('‾\\'),
+        candidates[key].percentageChange > 0
+        ? chalk.green(parseFloat(candidates[key].percentageChange).toFixed(1) + '%')
+        : chalk.red(parseFloat(candidates[key].percentageChange).toFixed(1) + '%'),
+        history !== undefined
+        ? chalk.grey(parseFloat((candidates[key].percentageChange - candidates[key].historyPercentageChange)).toFixed(1) + '%')
+        : '',
+        '| BTC:', parseFloat(candidates[key].valueInBTC).toFixed(decimals.decimalPositionPlus),
+        history === undefined
+        ? ''
+        : chalk.bold.grey(parseFloat(((candidates[key].valueInBTC) - (candidates[key].historyValueInBTC))).toFixed(decimals.decimalPositionPlus)),
+        '| Cost:', parseFloat(candidates[key].cost.amount).toFixed(decimals.decimalPositionPlus)
+      )
+    }
+
+    console.log('\r')
   }
 
   console.log(
