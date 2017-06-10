@@ -52,13 +52,11 @@ function setCurrency (currency) {
   if (currency === 'EUR') {
     currencies = {
       lowerCase: 'eur',
-      excludedCurrency: 'usd',
       currencySymbol: '€'
     }
   } else {
     currencies = {
       lowerCase: 'usd',
-      excludedCurrency: 'usd',
       currencySymbol: '€'
     }
   }
@@ -116,7 +114,7 @@ function filterCandidates (candidates, callback) {
   candidates = JSON.parse(candidates)
 
   // Remove keys not needed keys
-  candidates = omitDeep(candidates, ['id', 'price_' + currencies.excludedCurrency, '24h_volume_' + currencies.excludedCurrency, 'market_cap_' + currencies.excludedCurrency, 'last_updated', 'available_supply'])
+  candidates = omitDeep(candidates, ['id', 'last_updated', 'available_supply'])
 
   // Enriches api with portfolio
   for (let key in portfolio) {
