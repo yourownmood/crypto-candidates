@@ -2,21 +2,33 @@
   {
     "name": "Bitcoin",
     "amount": 2.1123,
-    "cost": 0
+    "cost": {
+      "currency": "EUR",
+      "amount": 100
+    }
   },
   {
     "name": "Ethereum",
     "amount": 0.2,
-    "cost": 0.1
+    "cost": {
+      "currency": "BTC",
+      "amount": 0.1
+    }
   },
   {
     "name": "Ripple",
     "amount": 3.999,
-    "cost": 10
+    "cost": {
+      "currency": "BTC",
+      "amount": 10
+    }
   },
   {
     "name": "NEM",
     "amount": 0.4,
-    "cost": 0.01
+    "cost": {
+      "currency": "BTC",
+      "amount": 0.01
+    }
   }
 ]

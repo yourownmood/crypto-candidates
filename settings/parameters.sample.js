@@ -7,7 +7,7 @@ const parameters = {
   maxPrice: 0.015,
   minDailyVolume: 50000,
   minMarketCap: 5000000,
-  minPercentChange7d: -100,
+  minPercentChange7d: -100
 }
 
 exports.parameters = parameters
