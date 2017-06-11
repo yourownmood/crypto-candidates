@@ -11,7 +11,7 @@ A node script to filter cryptocurrencies with potential, combine it with own por
 * Install dependencies: `$ yarn install` in this project folder.
 * Copy portfolio file: `$ cp settings/portfolio.sample.json settings/portfolio.json`.
 * Copy parameters file: `$ cp settings/parameters.sample.js settings/parameters.js`.
-* Include the currencies, amount and cost (in BTC) which are currently in your portfolio in `settings/portfolio.json`.
+* Include your currencies, amount and cost (in BTC, USD or EUR) which are currently in your portfolio in `settings/portfolio.json`.
 * Setup your filter parameters in `settings/parameters.js`.
 
 ## How to run:
@@ -25,7 +25,9 @@ Run `$ yarn start` in your terminal.
 * ~~Save total previous result and show total trend since last check.~~
 * ~~Show difference in total history comparison instead of total amounts.~~
 * ~~Show gain or loss per currency based on history search.~~
-* Include USD/EUR as cost currency.
+* ~~Include USD/EUR as cost currency.~~
+* Support BTC character in console output.
+* Include BTC calculations in console overview.
 * Only compare/save history if history is different then current state.
 * Sort result by price (or other parameter).
 

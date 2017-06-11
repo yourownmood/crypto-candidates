@@ -9,10 +9,10 @@
   },
   {
     "name": "Ethereum",
-    "amount": 0.2,
+    "amount": 2,
     "cost": {
-      "currency": "BTC",
-      "amount": 0.1
+      "currency": "EUR",
+      "amount": 400
     }
   },
   {
