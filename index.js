@@ -141,7 +141,7 @@ function filterCandidates (candidates, callback) {
 
   // Enrich myCandidates list with cost and profit
   for (let key in myCandidates) {
-    if (myCandidates[key].cost && myCandidates[key].cost.amount > 0 && myCandidates[key].name !== 'Bitcoin') {
+    if (myCandidates[key].cost && myCandidates[key].cost.amount > 0) {
       if (myCandidates[key].cost.currency !== 'BTC') {
         costInBTC = myCandidates[key].cost.amount / myCandidates[btcPosition]['price_' + currencies.lowerCase]
       } else {
@@ -171,7 +171,7 @@ function filterCandidates (candidates, callback) {
 
   if (history) {
     for (let key in history) {
-      if (history[key].cost && history[key].cost.amount > 0 && history[key].name !== 'Bitcoin') {
+      if (history[key].cost && history[key].cost.amount > 0) {
         if (history[key].cost.currency !== 'BTC') {
           historyCostInBTC = history[key].cost.amount / history[btcPosition]['price_' + currencies.lowerCase]
         } else {
@@ -247,7 +247,7 @@ function printCandidates (candidates) {
       chalk.grey(']')
     )
 
-    if (candidates[key].cost && candidates[key].cost.amount > 0 && candidates[key].name !== 'Bitcoin') {
+    if (candidates[key].cost && candidates[key].cost.amount > 0) {
       console.log(
         history === undefined
         ? ''
