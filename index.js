@@ -131,7 +131,7 @@ function filterCandidates (candidates, callback) {
 
   // Enrich myCandidates list with cost and profit
   for (let key in myCandidates) {
-    if (myCandidates[key].cost && myCandidates[key].cost.amount > 0 && myCandidates[key].cost.currency === 'BTC' && myCandidates[key].name !== 'Bitcoin') {
+    if (myCandidates[key].cost && myCandidates[key].cost.amount > 0 && myCandidates[key].cost.currency === 'BTC') {
       // Conversion to BTC/MONEY
       valueInBTC = myCandidates[key].amount * myCandidates[key].price_btc
       valueInCurrency = myCandidates[key].amount * myCandidates[key]['price_' + currencies.lowerCase]
@@ -145,7 +145,7 @@ function filterCandidates (candidates, callback) {
       // Calculate combined value and cost
       totalCostBTC = totalCostBTC + myCandidates[key].cost.amount
       totalValueBTC = totalValueBTC + valueInBTC
-      totalPercentageChange = ((totalValueBTC - totalCostBTC) / totalValueBTC) * 100
+      totalPercentageChange = totalPercentageChange + percentageChange
       totalValueCurrency = totalValueCurrency + valueInCurrency
     }
   }
@@ -154,7 +154,7 @@ function filterCandidates (candidates, callback) {
 
   if (history) {
     for (let key in history) {
-      if (history[key].cost && history[key].cost.amount > 0 && history[key].cost.currency === 'BTC' && history[key].name !== 'Bitcoin') {
+      if (history[key].cost && history[key].cost.amount > 0 && history[key].cost.currency === 'BTC') {
         // History conversion to BTC/MONEY
         historyValueInBTC = history[key].amount * history[key].price_btc
         historyPercentageChange = ((historyValueInBTC - history[key].cost.amount) / history[key].cost.amount) * 100
@@ -167,7 +167,7 @@ function filterCandidates (candidates, callback) {
         // Calculate combined history value and history cost
         historyTotalCostBTC = historyTotalCostBTC + history[key].cost.amount
         historyTotalValueBTC = historyTotalValueBTC + history[key].valueInBTC
-        historyTotalPercentageChange = ((historyTotalValueBTC - historyTotalCostBTC) / historyTotalValueBTC) * 100
+        historyTotalPercentageChange = historyTotalPercentageChange + historyPercentageChange
       }
     }
   }
@@ -267,14 +267,14 @@ function printCandidates (candidates) {
     '| BTC:', parseFloat(totalValueBTC - totalCostBTC).toFixed(3),
     history !== undefined
     ? chalk.grey(parseFloat(((totalValueBTC - totalCostBTC) - (historyTotalValueBTC - historyTotalCostBTC))).toFixed(3))
-    : '',
-    '|', currencies.currencySymbol + parseFloat(totalValueCurrency).toFixed(2)
+    : ''
   )
 
   console.log(
     chalk.grey(
-      'Cost:', totalCostBTC,
-      'Value:', totalValueBTC
+      'Cost BTC:', totalCostBTC,
+      'Value BTC:', totalValueBTC,
+      currencies.currencySymbol + parseFloat(totalValueCurrency).toFixed(2)
     )
   )
 
