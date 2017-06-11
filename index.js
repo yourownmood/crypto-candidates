@@ -262,11 +262,11 @@ function printCandidates (candidates) {
         history !== undefined
         ? chalk.grey(parseFloat((candidates[key].percentageChange - candidates[key].historyPercentageChange)).toFixed(1) + '%')
         : '',
-        '| Value BTC:', parseFloat(candidates[key].valueInBTC).toFixed(decimals.decimalPositionPlus),
+        '| Value: \u20bf', parseFloat(candidates[key].valueInBTC).toFixed(decimals.decimalPositionPlus),
         history === undefined
         ? ''
         : chalk.bold.grey(parseFloat(((candidates[key].valueInBTC) - (candidates[key].historyValueInBTC))).toFixed(decimals.decimalPositionPlus)),
-        '| Cost BTC:', parseFloat(candidates[key].costInBTC).toFixed(decimals.decimalPositionPlus)
+        '| Cost: \u20bf', parseFloat(candidates[key].costInBTC).toFixed(decimals.decimalPositionPlus)
       )
     }
 
@@ -288,7 +288,7 @@ function printCandidates (candidates) {
     history !== undefined
     ? chalk.grey(parseFloat((totalPercentageChange - historyTotalPercentageChange)).toFixed(2) + '%')
     : '',
-    '| Profit BTC:', parseFloat(totalValueBTC - totalCostBTC).toFixed(3),
+    '| Profit: \u20bf', parseFloat(totalValueBTC - totalCostBTC).toFixed(3),
     history !== undefined
     ? chalk.grey(parseFloat(((totalValueBTC - totalCostBTC) - (historyTotalValueBTC - historyTotalCostBTC))).toFixed(3))
     : ''
@@ -296,8 +296,8 @@ function printCandidates (candidates) {
 
   console.log(
     chalk.grey(
-      'Cost BTC:', totalCostBTC,
-      'Value BTC:', totalValueBTC,
+      'Cost: \u20bf', totalCostBTC,
+      'Value: \u20bf', totalValueBTC,
       currencies.currencySymbol + parseFloat(totalValueCurrency).toFixed(2)
     )
   )
