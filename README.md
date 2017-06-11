@@ -26,7 +26,7 @@ Run `$ yarn start` in your terminal.
 * ~~Show difference in total history comparison instead of total amounts.~~
 * ~~Show gain or loss per currency based on history search.~~
 * ~~Include USD/EUR as cost currency.~~
-* Support BTC character in console output.
+* ~~Support BTC character in console output.~~
 * Include BTC calculations in console overview.
 * Only compare/save history if history is different then current state.
 * Sort result by price (or other parameter).
