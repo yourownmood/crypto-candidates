@@ -205,22 +205,22 @@ function printCandidates (candidates) {
       candidates[key].percent_change_1h > 0
       ? chalk.green(candidates[key].percent_change_1h)
       : chalk.red.bold(candidates[key].percent_change_1h),
-      chalk.grey(' 1h ]'),
+      chalk.grey('1h ]'),
       chalk.grey('['),
       candidates[key].percent_change_24h > 0
       ? chalk.green(candidates[key].percent_change_24h)
       : chalk.red.bold(candidates[key].percent_change_24h),
-      chalk.grey(' 24h ]'),
+      chalk.grey('24h ]'),
       chalk.grey('['),
       candidates[key].percent_change_7d > 0
       ? chalk.green(candidates[key].percent_change_7d)
       : chalk.red.bold(candidates[key].percent_change_7d),
-      chalk.grey(' 7d ]'),
-      chalk.grey('[ '),
+      chalk.grey('7d ]'),
+      chalk.grey('['),
       candidates[key]['price_' + currencies.lowerCase] < maxPrice
       ? currencies.currencySymbol + parseFloat(candidates[key]['price_' + currencies.lowerCase]).toFixed(decimals.decimalPositionPlus)
       : chalk.grey(currencies.currencySymbol + parseFloat(candidates[key]['price_' + currencies.lowerCase]).toFixed(decimals.decimalPosition)),
-      chalk.grey(' ]')
+      chalk.grey(']')
     )
 
     if (candidates[key].cost && candidates[key].cost.amount > 0 && candidates[key].cost.currency === 'BTC') {
