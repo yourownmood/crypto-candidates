@@ -25,12 +25,12 @@ const minMarketCap = parameters.minMarketCap
 const minPercentChange7d = parameters.minPercentChange7d
 
 let valueInBTC = 0
-let valueInMoney = 0
+let valueInCurrency = 0
 let percentageChange = 0
 let totalCostBTC = 0
 let totalValueBTC = 0
 let totalPercentageChange = 0
-let totalValueMoney = 0
+let totalValueCurrency = 0
 let historyValueInBTC = 0
 let historyPercentageChange = 0
 let historyTotalCostBTC = 0
@@ -134,19 +134,19 @@ function filterCandidates (candidates, callback) {
     if (myCandidates[key].cost && myCandidates[key].cost.amount > 0 && myCandidates[key].cost.currency === 'BTC' && myCandidates[key].name !== 'Bitcoin') {
       // Conversion to BTC/MONEY
       valueInBTC = myCandidates[key].amount * myCandidates[key].price_btc
-      valueInMoney = myCandidates[key].amount * myCandidates[key]['price_' + currencies.lowerCase]
+      valueInCurrency = myCandidates[key].amount * myCandidates[key]['price_' + currencies.lowerCase]
       percentageChange = ((valueInBTC - myCandidates[key].cost.amount) / myCandidates[key].cost.amount) * 100
 
       // Push conversions in myCandidates
       myCandidates[key].valueInBTC = valueInBTC
-      myCandidates[key].valueInMoney = valueInMoney
+      myCandidates[key].valueInCurrency = valueInCurrency
       myCandidates[key].percentageChange = percentageChange
 
       // Calculate combined value and cost
       totalCostBTC = totalCostBTC + myCandidates[key].cost.amount
       totalValueBTC = totalValueBTC + valueInBTC
       totalPercentageChange = ((totalValueBTC - totalCostBTC) / totalValueBTC) * 100
-      totalValueMoney = totalValueMoney + valueInMoney
+      totalValueCurrency = totalValueCurrency + valueInCurrency
     }
   }
 
@@ -268,7 +268,7 @@ function printCandidates (candidates) {
     history !== undefined
     ? chalk.grey(parseFloat(((totalValueBTC - totalCostBTC) - (historyTotalValueBTC - historyTotalCostBTC))).toFixed(3))
     : '',
-    '|', currencies.currencySymbol + parseFloat(totalValueMoney).toFixed(2)
+    '|', currencies.currencySymbol + parseFloat(totalValueCurrency).toFixed(2)
   )
 
   console.log(
