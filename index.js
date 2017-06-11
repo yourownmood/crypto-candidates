@@ -24,6 +24,8 @@ const minDailyVolume = parameters.minDailyVolume
 const minMarketCap = parameters.minMarketCap
 const minPercentChange7d = parameters.minPercentChange7d
 
+let btcPosition
+let costInBTC = 0
 let valueInBTC = 0
 let valueInCurrency = 0
 let percentageChange = 0
@@ -31,6 +33,7 @@ let totalCostBTC = 0
 let totalValueBTC = 0
 let totalPercentageChange = 0
 let totalValueCurrency = 0
+let historyCostInBTC = 0
 let historyValueInBTC = 0
 let historyPercentageChange = 0
 let historyTotalCostBTC = 0
@@ -126,24 +129,38 @@ function filterCandidates (candidates, callback) {
     return (r['price_' + currencies.lowerCase] < maxPrice &&
            r['24h_volume_' + currencies.lowerCase] > minDailyVolume &&
            r['market_cap_' + currencies.lowerCase] > minMarketCap &&
-           r['percent_change_7d'] > minPercentChange7d) || r['amount']
+           r['percent_change_7d'] > minPercentChange7d) || r.name === 'Bitcoin' || r['amount']
   })
+
+  // Find Bitcoin position
+  for (let key in myCandidates) {
+    if (myCandidates[key].name === 'Bitcoin') {
+      btcPosition = key
+    }
+  }
 
   // Enrich myCandidates list with cost and profit
   for (let key in myCandidates) {
-    if (myCandidates[key].cost && myCandidates[key].cost.amount > 0 && myCandidates[key].cost.currency === 'BTC') {
+    if (myCandidates[key].cost && myCandidates[key].cost.amount > 0 && myCandidates[key].name !== 'Bitcoin') {
+      if (myCandidates[key].cost.currency !== 'BTC') {
+        costInBTC = myCandidates[key].cost.amount / myCandidates[btcPosition]['price_' + currencies.lowerCase]
+      } else {
+        costInBTC = myCandidates[key].cost.amount
+      }
+
       // Conversion to BTC/MONEY
       valueInBTC = myCandidates[key].amount * myCandidates[key].price_btc
       valueInCurrency = myCandidates[key].amount * myCandidates[key]['price_' + currencies.lowerCase]
-      percentageChange = ((valueInBTC - myCandidates[key].cost.amount) / myCandidates[key].cost.amount) * 100
+      percentageChange = ((valueInBTC - costInBTC) / costInBTC) * 100
 
       // Push conversions in myCandidates
+      myCandidates[key].costInBTC = costInBTC
       myCandidates[key].valueInBTC = valueInBTC
       myCandidates[key].valueInCurrency = valueInCurrency
       myCandidates[key].percentageChange = percentageChange
 
       // Calculate combined value and cost
-      totalCostBTC = totalCostBTC + myCandidates[key].cost.amount
+      totalCostBTC = totalCostBTC + costInBTC
       totalValueBTC = totalValueBTC + valueInBTC
       totalPercentageChange = totalPercentageChange + percentageChange
       totalValueCurrency = totalValueCurrency + valueInCurrency
@@ -154,18 +171,25 @@ function filterCandidates (candidates, callback) {
 
   if (history) {
     for (let key in history) {
-      if (history[key].cost && history[key].cost.amount > 0 && history[key].cost.currency === 'BTC') {
+      if (history[key].cost && history[key].cost.amount > 0 && history[key].name !== 'Bitcoin') {
+        if (history[key].cost.currency !== 'BTC') {
+          historyCostInBTC = history[key].cost.amount / history[btcPosition]['price_' + currencies.lowerCase]
+        } else {
+          historyCostInBTC = history[key].cost.amount
+        }
+
         // History conversion to BTC/MONEY
         historyValueInBTC = history[key].amount * history[key].price_btc
-        historyPercentageChange = ((historyValueInBTC - history[key].cost.amount) / history[key].cost.amount) * 100
+        historyPercentageChange = ((historyValueInBTC - historyCostInBTC) / historyCostInBTC) * 100
 
         // Push history conversions in myCandidates
         // TODO: match myCandidates with History 'checkAndAdd'
+        myCandidates[key].historyCostInBTC = historyCostInBTC
         myCandidates[key].historyValueInBTC = historyValueInBTC
         myCandidates[key].historyPercentageChange = historyPercentageChange
 
         // Calculate combined history value and history cost
-        historyTotalCostBTC = historyTotalCostBTC + history[key].cost.amount
+        historyTotalCostBTC = historyTotalCostBTC + historyCostInBTC
         historyTotalValueBTC = historyTotalValueBTC + history[key].valueInBTC
         historyTotalPercentageChange = historyTotalPercentageChange + historyPercentageChange
       }
@@ -223,7 +247,7 @@ function printCandidates (candidates) {
       chalk.grey(']')
     )
 
-    if (candidates[key].cost && candidates[key].cost.amount > 0 && candidates[key].cost.currency === 'BTC') {
+    if (candidates[key].cost && candidates[key].cost.amount > 0 && candidates[key].name !== 'Bitcoin') {
       console.log(
         history === undefined
         ? ''
@@ -238,11 +262,11 @@ function printCandidates (candidates) {
         history !== undefined
         ? chalk.grey(parseFloat((candidates[key].percentageChange - candidates[key].historyPercentageChange)).toFixed(1) + '%')
         : '',
-        '| BTC:', parseFloat(candidates[key].valueInBTC).toFixed(decimals.decimalPositionPlus),
+        '| Value BTC:', parseFloat(candidates[key].valueInBTC).toFixed(decimals.decimalPositionPlus),
         history === undefined
         ? ''
         : chalk.bold.grey(parseFloat(((candidates[key].valueInBTC) - (candidates[key].historyValueInBTC))).toFixed(decimals.decimalPositionPlus)),
-        '| Cost:', parseFloat(candidates[key].cost.amount).toFixed(decimals.decimalPositionPlus)
+        '| Cost BTC:', parseFloat(candidates[key].costInBTC).toFixed(decimals.decimalPositionPlus)
       )
     }
 
@@ -264,7 +288,7 @@ function printCandidates (candidates) {
     history !== undefined
     ? chalk.grey(parseFloat((totalPercentageChange - historyTotalPercentageChange)).toFixed(2) + '%')
     : '',
-    '| BTC:', parseFloat(totalValueBTC - totalCostBTC).toFixed(3),
+    '| Profit BTC:', parseFloat(totalValueBTC - totalCostBTC).toFixed(3),
     history !== undefined
     ? chalk.grey(parseFloat(((totalValueBTC - totalCostBTC) - (historyTotalValueBTC - historyTotalCostBTC))).toFixed(3))
     : ''
