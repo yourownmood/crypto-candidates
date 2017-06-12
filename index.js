@@ -291,9 +291,9 @@ function printCandidates (candidates) {
     '|',
     history === undefined
     ? ''
-    : historyTotalValueBTC === totalValueBTC
+    : (totalValueBTC - totalCostBTC) === (historyTotalValueBTC - historyTotalCostBTC)
     ? chalk.bold.grey('--')
-    : historyTotalValueBTC < totalValueBTC
+    : (totalValueBTC - totalCostBTC) > (historyTotalValueBTC - historyTotalCostBTC)
     ? chalk.bold.green('_/')
     : chalk.bold.red('‾\\'),
     totalValueBTC > totalCostBTC
