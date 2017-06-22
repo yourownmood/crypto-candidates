@@ -28,6 +28,9 @@ Run `$ yarn start` in your terminal.
 * ~~Include USD/EUR as cost currency.~~
 * ~~Support BTC character in console output.~~
 * ~~Include BTC calculations in console overview.~~
+* Includes highest rising currency and most falling currency in total overview.
+* Include Gain and cost in EUR/USD in total overview.
+* Split potential candidates from portfolio status (2 commands).
 * Only compare/save history if history is different then current state.
 * Sort result by price (or other parameter).
 
