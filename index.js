@@ -282,9 +282,9 @@ function printCandidates (candidates) {
     : historyTotalPercentageChange < totalPercentageChange
     ? chalk.bold.green('_/')
     : chalk.bold.red('‾\\'),
-    totalValueBTC > totalCostBTC
+    totalPercentageChange > 0
     ? chalk.green(parseFloat(totalPercentageChange).toFixed(2) + '%')
-    : chalk.red(totalPercentageChange + '%'),
+    : chalk.red(parseFloat(totalPercentageChange).toFixed(2) + '%'),
     history !== undefined
     ? chalk.grey(parseFloat((totalPercentageChange - historyTotalPercentageChange)).toFixed(2) + '%')
     : '',
