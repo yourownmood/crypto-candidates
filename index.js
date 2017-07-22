@@ -183,10 +183,13 @@ function filterCandidates (candidates, callback) {
         historyPercentageChange = ((historyValueInBTC - historyCostInBTC) / historyCostInBTC) * 100
 
         // Push history conversions in myCandidates
-        // TODO: match myCandidates with History 'checkAndAdd'
-        myCandidates[key].historyCostInBTC = historyCostInBTC
-        myCandidates[key].historyValueInBTC = historyValueInBTC
-        myCandidates[key].historyPercentageChange = historyPercentageChange
+        myCandidates.some(function (obj) {
+          if (obj.name === history[key].name) {
+            obj.amouhistoryCostInBTCnt = historyCostInBTC
+            obj.historyValueInBTC = historyValueInBTC
+            obj.historyPercentageChange = historyPercentageChange
+          }
+        })
 
         // Calculate combined history value and history cost
         historyTotalCostBTC = historyTotalCostBTC + historyCostInBTC
